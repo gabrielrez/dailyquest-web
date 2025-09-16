@@ -115,7 +115,19 @@ const handleRegister = async () => {
     localStorage.setItem("token", data.data.token);
     window.location.href = "/home";
   } catch (err) {
-    errorMessage.value = "Invalid fields. Give it another shot!";
+    if (err.response && err.response.data && err.response.data.errors) {
+      const errors = err.response.data.errors;
+      const messages = Object.entries(errors)
+        .map(([field, msgs]) => {
+          return msgs.map((msg) => `- ${msg}`);
+        })
+        .flat();
+      errorMessage.value = messages.join("\n");
+    } else if (err.response && err.response.data && err.response.data.message) {
+      errorMessage.value = err.response.data.message;
+    } else {
+      errorMessage.value = "Something went wrong. Please try again.";
+    }
     showError.value = true;
   } finally {
     loading.value = false;

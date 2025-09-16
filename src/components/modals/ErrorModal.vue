@@ -17,7 +17,7 @@
         <h2 class="text-4xl font-semibold text-white">
           {{ title }}
         </h2>
-        <p class="mt-5 text-[1rem] text-[#A1A1AA] mb-4">
+        <p class="mt-5 text-[1rem] text-[#A1A1AA] mb-4" style="white-space: pre-line;">
           {{ message }}
         </p>
 
