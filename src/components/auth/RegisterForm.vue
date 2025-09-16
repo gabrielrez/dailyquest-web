@@ -9,12 +9,14 @@
       Enter your credentials below to create your account
     </p>
 
-    <form class="mt-12 space-y-5">
+    <form class="mt-12 space-y-5" @submit.prevent="handleRegister">
       <div>
         <label class="block text-sm font-medium text-white mb-2.5">Full Name</label>
         <input
           type="text"
           placeholder="Full Name"
+          v-model="fullName"
+          required
           class="w-full px-4 py-2 text-sm bg-transparent border border-[#27272A] rounded-[6px] focus:outline-none focus:border-white text-white"
         />
       </div>
@@ -23,6 +25,8 @@
         <input
           type="text"
           placeholder="Username"
+          v-model="username"
+          required
           class="w-full px-4 py-2 text-sm bg-transparent border border-[#27272A] rounded-[6px] focus:outline-none focus:border-white text-white"
         />
       </div>
@@ -31,6 +35,8 @@
         <input
           type="text"
           placeholder="E-mail"
+          v-model="email"
+          required
           class="w-full px-4 py-2 text-sm bg-transparent border border-[#27272A] rounded-[6px] focus:outline-none focus:border-white text-white"
         />
       </div>
@@ -40,6 +46,8 @@
           <input
             type="password"
             placeholder="Password"
+            v-model="password"
+            required
             class="w-full px-4 py-2 text-sm bg-transparent border border-[#27272A] rounded-[6px] focus:outline-none focus:border-white text-white"
           />
         </div>
@@ -50,6 +58,8 @@
           <input
             type="password"
             placeholder="Confirm Password"
+            v-model="passwordConfirmation"
+            required
             class="w-full px-4 py-2 text-sm bg-transparent border border-[#27272A] rounded-[6px] focus:outline-none focus:border-white text-white"
           />
         </div>
@@ -68,4 +78,47 @@
       >
     </p>
   </section>
+
+  <ErrorModal :isOpen="showError" :message="errorMessage" @close="showError = false" />
 </template>
+
+<script setup>
+import { ref } from "vue";
+import api from "@/services/api";
+import ErrorModal from "@/components/modals/ErrorModal.vue";
+
+const fullName = ref("");
+const username = ref("");
+const email = ref("");
+const password = ref("");
+const passwordConfirmation = ref("");
+const loading = ref(false);
+const showError = ref(false);
+const errorMessage = ref("");
+
+const handleRegister = async () => {
+  loading.value = true;
+  showError.value = false;
+  errorMessage.value = "";
+
+  try {
+    const { data } = await api.post("/register", {
+      full_name: fullName.value,
+      username: username.value,
+      email: email.value,
+      password: password.value,
+      password_confirmation: passwordConfirmation.value,
+    });
+
+    console.log(data);
+
+    localStorage.setItem("token", data.data.token);
+    window.location.href = "/home";
+  } catch (err) {
+    errorMessage.value = "Invalid fields. Give it another shot!";
+    showError.value = true;
+  } finally {
+    loading.value = false;
+  }
+};
+</script>
