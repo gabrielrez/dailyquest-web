@@ -1,5 +1,5 @@
 <template>
-    <router-link to="/">
+    <router-link to="/" class="inline-block">
         <img :src="logo" alt="DailyQuest" />
     </router-link>
 </template>
