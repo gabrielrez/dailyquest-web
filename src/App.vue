@@ -1,7 +1,7 @@
 <template>
-  <div>
-    <router-view />
-  </div>
+    <div>
+        <router-view />
+    </div>
 </template>
 
 <script setup>
@@ -12,10 +12,10 @@ import { useUserStore } from "@/stores/user";
 const userStore = useUserStore();
 
 onMounted(() => {
-  const token = Cookie.get("_my_token");
+    const token = Cookie.get("_my_token");
 
-  if (token && !userStore.user) {
-    userStore.fetchUser();
-  }
+    if (token && !userStore.user) {
+        userStore.fetchUser();
+    }
 });
 </script>

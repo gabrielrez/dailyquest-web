@@ -8,8 +8,8 @@
 import logo from '../../assets/DailyQuest.svg'
 
 export default {
-  data() {
-    return { logo }
-  }
+    data() {
+        return { logo }
+    }
 }
 </script>
