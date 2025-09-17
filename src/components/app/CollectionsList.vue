@@ -1,26 +1,18 @@
 <template>
-  <div class="mt-12 w-full grid grid-cols-2 gap-10">
-    <CollectionItem
-      v-for="collection in collections"
-      :key="collection.id"
-      :collection="collection"
-    />
-  </div>
+    <div class="mt-12 w-full grid grid-cols-2 gap-10">
+        <CollectionItem v-for="collection in collectionStore.collections" :key="collection.id"
+            :collection="collection" />
+    </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
-import api from "@/services/api";
+import { onMounted } from "vue";
 import CollectionItem from "@/components/app/CollectionItem.vue";
+import { useCollectionStore } from "@/stores/collection";
 
-const collections = ref([]);
+const collectionStore = useCollectionStore();
 
-onMounted(async () => {
-  try {
-    const { data } = await api.get("/collections");
-    collections.value = data.data;
-  } catch (error) {
-    console.error("Failed to fetch collections", error);
-  }
+onMounted(() => {
+    collectionStore.fetchCollections();
 });
 </script>

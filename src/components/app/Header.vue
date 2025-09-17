@@ -11,15 +11,21 @@
       <h1 class="text-white text-[2.5rem] font-bold">My Collections</h1>
     </div>
     <button
+      @click="isOpen = true"
       class="w-full max-w-[184px] bg-[#BB86FC] text-[#1E1E1E] text-center text-sm font-bold px-8 py-2 rounded-[6px] cursor-pointer transition-all duration-300 ease-out hover:bg-[#AC70F7]"
     >
       Create Collection
     </button>
   </div>
+
+  <CreateCollectionModal v-if="isOpen" @close="isOpen = false" />
 </template>
 
 <script setup>
+import { ref } from "vue";
 import { useUserStore } from "@/stores/user";
+import CreateCollectionModal from "@/components/modals/CreateCollectionModal.vue";
 
 const userStore = useUserStore();
+const isOpen = ref(false);
 </script>

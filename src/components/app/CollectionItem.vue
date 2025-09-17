@@ -16,7 +16,7 @@
           collection.status === 'completed' ? 'bg-[#03DAC6]/25' : 'bg-[#27272A]',
         ]"
       >
-        <template v-if="collection.owner_id == userStore.user">
+        <template v-if="collection.owner_id == userStore.user.id">
           Owner
           <Crown class="w-3 h-3 text-yellow-400" aria-hidden="true" />
         </template>
