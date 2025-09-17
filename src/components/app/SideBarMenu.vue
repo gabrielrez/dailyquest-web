@@ -26,6 +26,7 @@ import { ref } from "vue";
 import { Home, User, Settings, LogOut } from "lucide-vue-next";
 import logo from "../../assets/DailyQuest.svg";
 import api from "@/services/api";
+import Cookie from "js-cookie";
 
 const selected = ref("Home");
 
@@ -41,12 +42,12 @@ async function select(item) {
   if (item.label === "Logout") {
     try {
       const { data } = await api.post("/logout");
-      localStorage.removeItem("token");
+      Cookie.remove("_my_token");
       window.location.href = "/login";
     } catch (err) {
       console.log(err);
     } finally {
-      localStorage.removeItem("token");
+      Cookie.remove("_my_token");
       window.location.href = "/login";
     }
   }

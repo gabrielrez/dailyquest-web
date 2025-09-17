@@ -50,6 +50,7 @@
 import { ref } from "vue";
 import api from "@/services/api";
 import ErrorModal from "@/components/modals/ErrorModal.vue";
+import Cookie from "js-cookie";
 
 const email = ref("");
 const password = ref("");
@@ -68,7 +69,7 @@ const handleLogin = async () => {
       password: password.value,
     });
 
-    localStorage.setItem("token", data.data.token);
+    Cookie.set("_my_token", data.data.token);
     window.location.href = "/home";
   } catch (err) {
     errorMessage.value = "Invalid credentials. Give it another shot!";

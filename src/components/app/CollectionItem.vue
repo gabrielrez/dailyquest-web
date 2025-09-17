@@ -1,14 +1,22 @@
 <template>
   <router-link
     :to="`/collection/${collection.id}`"
-    class="w-full bg-[#09090B] border border-[#27272A] rounded-[6px] px-6 py-5 hover:scale-95 transition duration-300 ease-out"
+    :class="[
+      'w-full rounded-[6px] px-6 py-5 hover:scale-95 transition duration-300 ease-out',
+      collection.status === 'completed'
+        ? 'bg-[#03DAC6]/5 border border-[#03DAC6]/25'
+        : 'bg-[#09090B] border border-[#27272A]',
+    ]"
   >
     <div class="flex items-center justify-between">
       <h3 class="text-white font-semibold text-xl">{{ collection.name }}</h3>
       <span
-        class="flex items-center gap-2 bg-[#27272A] text-sm text-white px-4 py-0.5 rounded-[6px]"
+        :class="[
+          'flex items-center gap-2 text-sm text-white px-4 py-0.5 rounded-[4px]',
+          collection.status === 'completed' ? 'bg-[#03DAC6]/25' : 'bg-[#27272A]',
+        ]"
       >
-        <template v-if="collection.owner_id == userStore.user.id">
+        <template v-if="collection.owner_id == userStore.user">
           Owner
           <Crown class="w-3 h-3 text-yellow-400" aria-hidden="true" />
         </template>
@@ -24,6 +32,7 @@
 </template>
 
 <script setup>
+import { onMounted } from "vue";
 import { useUserStore } from "@/stores/user";
 import { Crown, Users } from "lucide-vue-next";
 

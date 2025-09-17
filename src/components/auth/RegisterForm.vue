@@ -86,6 +86,7 @@
 import { ref } from "vue";
 import api from "@/services/api";
 import ErrorModal from "@/components/modals/ErrorModal.vue";
+import Cookie from "js-cookie";
 
 const fullName = ref("");
 const username = ref("");
@@ -110,9 +111,7 @@ const handleRegister = async () => {
       password_confirmation: passwordConfirmation.value,
     });
 
-    console.log(data);
-
-    localStorage.setItem("token", data.data.token);
+    Cookie.set("_my_token", data.data.token);
     window.location.href = "/home";
   } catch (err) {
     if (err.response && err.response.data && err.response.data.errors) {

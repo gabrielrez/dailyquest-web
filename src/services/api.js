@@ -1,4 +1,5 @@
 import axios from "axios";
+import Cookie from "js-cookie";
 
 const api = axios.create({
     baseURL: import.meta.env.VITE_API_BASE_URL
@@ -6,7 +7,7 @@ const api = axios.create({
 
 api.interceptors.request.use(
     (config) => {
-        const token = localStorage.getItem("token");
+        const token = Cookie.get("_my_token");
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
         }
@@ -28,7 +29,7 @@ api.interceptors.response.use(
         }
 
         if (error.response?.status === 401) {
-            localStorage.removeItem("token");
+            Cookie.remove("_my_token");
             window.location.href = "/login";
         }
 
