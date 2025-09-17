@@ -16,13 +16,13 @@
                         <label class="block text-sm font-medium text-white mb-2.5">Name</label>
                         <input type="text" v-model="name" placeholder="Name" required
                             class="w-full px-4 py-2 text-sm bg-transparent border border-[#27272A] rounded-[6px] focus:outline-none focus:border-white text-white" />
-                        <p v-if="errors.name" class="text-red-500 text-sm mt-1">{{ errors.name }}</p>
+                        <p v-if="errors.name" class="text-[#FF4181] text-sm mt-1">{{ errors.name }}</p>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-white mb-2.5">Description</label>
                         <input type="text" v-model="description" placeholder="Description" required
                             class="w-full px-4 py-2 text-sm bg-transparent border border-[#27272A] rounded-[6px] focus:outline-none focus:border-white text-white" />
-                        <p v-if="errors.description" class="text-red-500 text-sm mt-1">
+                        <p v-if="errors.description" class="text-[#FF4181] text-sm mt-1">
                             {{ errors.description }}
                         </p>
                     </div>

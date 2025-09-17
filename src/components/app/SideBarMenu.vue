@@ -7,12 +7,13 @@
         <span class="block my-10 bg-[#292929] w-full h-[1px] rounded"></span>
 
         <nav class="flex-1 space-y-10">
-            <button v-for="item in menuItems" :key="item.label" @click="select(item)"
-                class="w-full text-lg flex items-center gap-3 py-2 rounded-lg transition cursor-pointer"
-                :class="[selected === item.label ? 'text-white' : 'opacity-50 hover:opacity-100']">
+            <router-link v-for="item in menuItems" :key="item.label" :to="item.to"
+                class="w-full text-lg flex items-center gap-3 py-2 rounded-lg transition"
+                :class="[selected === item.label ? 'text-white' : 'opacity-50 hover:opacity-100']"
+                @click.native="select(item)">
                 <component :is="item.icon" class="w-5 h-5" />
                 <span>{{ item.label }}</span>
-            </button>
+            </router-link>
         </nav>
     </aside>
 </template>
@@ -27,19 +28,18 @@ import Cookie from "js-cookie";
 const selected = ref("Home");
 
 const menuItems = [
-    { label: "Home", icon: Home },
-    { label: "My Profile", icon: User },
-    { label: "Settings", icon: Settings },
-    { label: "Logout", icon: LogOut },
+    { label: "Home", icon: Home, to: "/home" },
+    { label: "My Profile", icon: User, to: "/me" },
+    { label: "Settings", icon: Settings, to: "/settings" },
+    { label: "Logout", icon: LogOut, to: "/login" },
 ];
 
 async function select(item) {
     selected.value = item.label;
+
     if (item.label === "Logout") {
         try {
-            const { data } = await api.post("/logout");
-            Cookie.remove("_my_token");
-            window.location.href = "/login";
+            await api.post("/logout");
         } catch (err) {
             console.log(err);
         } finally {

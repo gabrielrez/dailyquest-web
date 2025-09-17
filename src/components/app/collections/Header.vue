@@ -3,7 +3,7 @@
         <p class="text-[#A1A1AA] text-sm">
             Complete all goals in a collection to complete the collection!
         </p>
-        <h3 class="text-white font-medium">{{ userStore.user?.username || "Loading..." }}</h3>
+        <ProfilePicture />
     </div>
     <div class="mt-20 w-full flex items-center justify-between">
         <div class="w-full flex items-center gap-4">
@@ -23,7 +23,7 @@
 import { ref } from "vue";
 import { useUserStore } from "@/stores/user";
 import CreateCollectionModal from "@/components/modals/CreateCollectionModal.vue";
+import ProfilePicture from "@/components/app/global/ProfilePicture.vue";
 
-const userStore = useUserStore();
 const isOpen = ref(false);
 </script>
