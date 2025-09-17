@@ -5,7 +5,7 @@
       class="fixed inset-0 bg-[#020202]/50 backdrop-blur-xs flex items-center justify-center z-50"
     >
       <div
-        class="bg-[#020202] rounded-lg border border-[#27272A] w-full max-w-lg px-9 py-8 relative"
+        class="bg-[#160C10] rounded-lg border border-[#9D2A51] border-opacity-25 w-full max-w-lg px-9 py-8 relative"
       >
         <button
           @click="close"
@@ -17,7 +17,7 @@
         <h2 class="text-4xl font-semibold text-white">
           {{ title }}
         </h2>
-        <p class="mt-5 text-[1rem] text-[#A1A1AA] mb-4" style="white-space: pre-line;">
+        <p class="mt-5 text-[1rem] text-[#A1A1AA] mb-4" style="white-space: pre-line">
           {{ message }}
         </p>
 
@@ -63,7 +63,7 @@ export default {
 <style>
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.1s
+  transition: opacity 0.1s;
 }
 .fade-enter-from,
 .fade-leave-to {

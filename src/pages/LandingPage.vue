@@ -8,8 +8,8 @@
 </template>
 
 <script>
-import LpHeader from "../components/landingpage/LpHeader.vue";
-import LpHero from "../components/landingpage/LpHero.vue";
+import LpHeader from "@/components/landingpage/LpHeader.vue";
+import LpHero from "@/components/landingpage/LpHero.vue";
 
 export default {
   components: {

@@ -1,5 +1,5 @@
 <template>
-  <aside class="w-64 text-white flex flex-col shadow-lg">
+  <aside class="w-64 text-white flex flex-col">
     <router-link to="/home" class="max-w-32">
       <img :src="logo" alt="DailyQuest" />
     </router-link>
