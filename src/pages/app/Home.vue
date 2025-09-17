@@ -12,8 +12,8 @@
 
 <script>
 import SideBarMenu from "@/components/app/SideBarMenu.vue";
-import Header from "@/components/app/Header.vue";
-import CollectionsList from "@/components/app/CollectionsList.vue";
+import Header from "@/components/app/collections/Header.vue";
+import CollectionsList from "@/components/app/collections/CollectionsList.vue";
 
 export default {
   components: {

@@ -7,7 +7,7 @@
 
 <script setup>
 import { onMounted } from "vue";
-import CollectionItem from "@/components/app/CollectionItem.vue";
+import CollectionItem from "@/components/app/collections/CollectionItem.vue";
 import { useCollectionStore } from "@/stores/collection";
 
 const collectionStore = useCollectionStore();
