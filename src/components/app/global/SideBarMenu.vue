@@ -9,7 +9,7 @@
         <nav class="flex-1 space-y-10">
             <router-link v-for="item in menuItems" :key="item.label" :to="item.to"
                 class="w-full text-lg flex items-center gap-3 py-2 rounded-lg transition"
-                :class="[selected === item.label ? 'text-white' : 'opacity-50 hover:opacity-100']"
+                :class="[selected === item.label ? 'text-white font-semibold' : 'opacity-30 hover:opacity-100']"
                 @click.native="select(item)">
                 <component :is="item.icon" class="w-5 h-5" />
                 <span>{{ item.label }}</span>
@@ -19,13 +19,14 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, computed, watch } from "vue";
 import { Home, User, Settings, LogOut } from "lucide-vue-next";
-import logo from "../../assets/DailyQuest.svg";
+import { useRoute } from "vue-router";
+import logo from "../../../assets/DailyQuest.svg";
 import api from "@/services/api";
 import Cookie from "js-cookie";
 
-const selected = ref("Home");
+const route = useRoute();
 
 const menuItems = [
     { label: "Home", icon: Home, to: "/home" },
@@ -33,6 +34,19 @@ const menuItems = [
     { label: "Settings", icon: Settings, to: "/settings" },
     { label: "Logout", icon: LogOut, to: "/login" },
 ];
+
+const selected = ref(null);
+
+const updateSelected = () => {
+    const match = menuItems.find(item => item.to === route.path);
+    selected.value = match ? match.label : null;
+};
+
+const isSelected = (item) => selected.value === item.label;
+
+updateSelected();
+
+watch(route, updateSelected);
 
 async function select(item) {
     selected.value = item.label;

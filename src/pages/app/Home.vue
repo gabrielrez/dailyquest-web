@@ -11,9 +11,9 @@
 </template>
 
 <script>
-import SideBarMenu from "@/components/app/SideBarMenu.vue";
-import Header from "@/components/app/collections/Header.vue";
-import CollectionsList from "@/components/app/collections/CollectionsList.vue";
+import SideBarMenu from "@/components/app/global/SideBarMenu.vue";
+import Header from "@/components/app/home/Header.vue";
+import CollectionsList from "@/components/app/home/CollectionsList.vue";
 
 export default {
     components: {
