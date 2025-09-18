@@ -1,8 +1,6 @@
 <template>
     <div class="w-full flex items-center justify-between">
-        <p class="text-[#A1A1AA] text-sm underline">
-            See all collaborators
-        </p>
+        <CollaboratorsProfilePictures :users="allUsers || []" />
         <ProfilePicture />
     </div>
     <div class="mt-20 w-full flex items-center justify-between">
@@ -19,11 +17,20 @@
 
 <script setup>
 import ProfilePicture from "@/components/app/global/ProfilePicture.vue";
+import CollaboratorsProfilePictures from "@/components/app/collection/CollaboratorsProfilePictures.vue";
+import { computed } from "vue";
 
-defineProps({
+const props = defineProps({
     collection: {
         type: Object,
-        required: true
+        required: false,
+        default: () => null
     }
+});
+
+const allUsers = computed(() => {
+    const users = Array.isArray(props.collection?.users) ? props.collection.users : [];
+    const owner = props.collection?.owner ? [props.collection.owner] : [];
+    return [...users, ...owner];
 });
 </script>

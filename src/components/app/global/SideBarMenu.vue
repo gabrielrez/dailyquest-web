@@ -1,12 +1,12 @@
 <template>
-    <aside class="w-64 text-white flex flex-col">
+    <aside class="w-60 text-white flex flex-col fixed h-screen bg-[#09090B] z-50">
         <router-link to="/home" class="max-w-32">
             <img :src="logo" alt="DailyQuest" />
         </router-link>
 
         <span class="block my-10 bg-[#292929] w-full h-[1px] rounded"></span>
 
-        <nav class="flex-1 space-y-10">
+        <nav class="flex-1 space-y-10 overflow-y-auto">
             <router-link v-for="item in menuItems" :key="item.label" :to="item.to"
                 class="w-full text-lg flex items-center gap-3 py-2 rounded-lg transition"
                 :class="[selected === item.label ? 'text-white font-semibold' : 'opacity-30 hover:opacity-100']"

@@ -2,7 +2,7 @@
     <main class="max-w-[93.75rem] mx-auto p-12">
         <section class="flex gap-20">
             <SideBarMenu />
-            <div class="w-full">
+            <div class="w-full ml-80">
                 <Header />
                 <CollectionsList />
             </div>

@@ -17,7 +17,7 @@
                     of the way.
                 </p>
                 <router-link to="/home"
-                    class="mt-5 inline-block bg-[#03DAC6] font-semibold px-8 py-4 rounded-[12px] cursor-pointer transition-all duration-300 ease-out hover:bg-gradient-to-l hover:from-[#03DAC6] hover:to-[#BB86FC] hover:shadow-lg hover:shadow-[#BB86FC]/25 hover:brightness-110">
+                    class="mt-5 inline-block bg-[#03DAC6] font-semibold px-8 py-4 rounded-[6px] cursor-pointer transition-all duration-300 ease-out hover:bg-gradient-to-l hover:from-[#03DAC6] hover:to-[#BB86FC] hover:shadow-lg hover:shadow-[#BB86FC]/25 hover:brightness-110">
                     JOIN RIGHT NOW
                 </router-link>
             </div>
@@ -26,7 +26,7 @@
     </section>
 </template>
 <script>
-import hero from "../../assets/lp-hero.png";
+import hero from "@/assets/lp-hero.png";
 
 export default {
     data() {
