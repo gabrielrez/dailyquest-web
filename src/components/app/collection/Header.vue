@@ -1,6 +1,6 @@
 <template>
     <div class="w-full flex items-center justify-between">
-        <CollaboratorsProfilePictures :users="allUsers || []" />
+        <CollaboratorsProfilePictures :users="allUsers || []" @click="isOpenCollaborators = true" />
         <ProfilePicture />
     </div>
     <div class="mt-20 w-full flex items-center justify-between">
@@ -15,11 +15,14 @@
     </div>
 
     <CreateGoalModal v-if="isOpen" @close="isOpen = false" @goalCreated="addGoal" :collection="collection" />
+    <CollaboratorsModal v-if="isOpenCollaborators" @close="isOpenCollaborators = false"
+        @userRemoved="removeUserFromList" :users="allUsers || []" :collection="collection" />
 </template>
 
 <script setup>
 import ProfilePicture from "@/components/app/global/ProfilePicture.vue";
 import CollaboratorsProfilePictures from "@/components/app/collection/CollaboratorsProfilePictures.vue";
+import CollaboratorsModal from "@/components/modals/CollaboratorsModal.vue";
 import CreateGoalModal from "@/components/modals/CreateGoalModal.vue";
 import { ref, computed } from "vue";
 import { useGoalsStore } from "@/stores/goals";
@@ -34,6 +37,7 @@ const props = defineProps({
 
 const goalsStore = useGoalsStore();
 const isOpen = ref(false);
+const isOpenCollaborators = ref(false);
 
 const allUsers = computed(() => {
     const users = Array.isArray(props.collection?.users) ? props.collection.users : [];
@@ -43,5 +47,11 @@ const allUsers = computed(() => {
 
 function addGoal(newGoal) {
     goalsStore.addGoal(newGoal);
+}
+
+function removeUserFromList(userId) {
+    if (props.collection) {
+        props.collection.users = props.collection.users.filter(u => u.id !== userId);
+    }
 }
 </script>
