@@ -17,14 +17,17 @@ import api from "@/services/api";
 import SideBarMenu from "@/components/app/global/SideBarMenu.vue";
 import Header from "@/components/app/collection/Header.vue";
 import GoalsList from "@/components/app/collection/GoalsList.vue";
+import { useGoalsStore } from "@/stores/goals";
 
 const collection = ref(null);
 const route = useRoute();
+const goalsStore = useGoalsStore();
 
 async function fetchCollection(id) {
     try {
         const { data } = await api.get(`/collections/${id}`);
         collection.value = data.data;
+        goalsStore.setGoals(data.data.goals || []);
     } catch (error) {
         console.error(error);
     }

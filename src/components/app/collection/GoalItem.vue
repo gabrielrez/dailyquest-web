@@ -44,28 +44,31 @@
 import { ref, computed, watch, onMounted, onBeforeUnmount } from "vue";
 import api from "@/services/api";
 import { MoreHorizontalIcon } from "lucide-vue-next";
+import { useGoalsStore } from "@/stores/goals";
 
 const props = defineProps({
     collection: {
         type: Object,
-        required: true,
+        required: false,
+        default: () => null
     },
     goal: {
         type: Object,
-        required: true,
+        required: false,
+        default: () => null
     },
 });
 
-const emit = defineEmits(['goalDeleted']);
+const goalsStore = useGoalsStore();
 
 const allUsers = computed(() => {
-    const users = Array.isArray(props.collection.users) ? props.collection.users : [];
-    const owner = props.collection.owner ? [props.collection.owner] : [];
+    const users = Array.isArray(props.collection?.users) ? props.collection?.users : [];
+    const owner = props.collection?.owner ? [props.collection?.owner] : [];
     return [...users, ...owner];
 });
 
-const selectedAssigned = ref(props.goal.assigned_to ?? "");
-const selectedStatus = ref(props.goal.status ?? "null");
+const selectedAssigned = ref(props.goal?.assigned_to ?? "");
+const selectedStatus = ref(props.goal?.status ?? "null");
 
 const containerStyle = computed(() => {
     switch (selectedStatus.value) {
@@ -127,11 +130,11 @@ onBeforeUnmount(() => {
 
 const deleteGoal = async () => {
     try {
-        await api.delete(`/collections/${props.collection.id}/goals/${props.goal.id}`);
+        await api.delete(`/collections/${props.collection?.id}/goals/${props.goal?.id}`);
         dropdownOpen.value = false;
-        emit('goalDeleted', props.goal.id);
+        goalsStore.removeGoal(props.goal?.id);
     } catch (error) {
-        console.error('Failed to delete goal', error);
+        console.error("Failed to delete goal", error);
     }
 };
 
@@ -139,20 +142,26 @@ watch(selectedAssigned, async (newValue, oldValue) => {
     if (newValue === oldValue) return;
     const username = newValue ? allUsers.value.find(u => u.id === newValue)?.username : null;
     try {
-        await api.patch(`/collections/${props.collection.id}/goals/${props.goal.id}/assign`, { user_username: username });
-        console.log('Assigned To successfully updated!');
+        const { data } = await api.patch(`/collections/${props.collection?.id}/goals/${props.goal?.id}/assign`, { user_username: username });
+
+        goalsStore.setGoals(
+            goalsStore.goals.map(g => g.id === props.goal.id ? data.data : g)
+        );
     } catch (error) {
-        console.error('Failed to update assigned to', error);
+        console.error("Failed to update assigned to", error);
     }
 });
 
 watch(selectedStatus, async (newValue, oldValue) => {
     if (newValue === oldValue) return;
     try {
-        await api.patch(`/collections/${props.collection.id}/goals/${props.goal.id}/status`, { status: newValue });
-        console.log('Status successfully updated!');
+        const { data } = await api.patch(`/collections/${props.collection?.id}/goals/${props.goal?.id}/status`, { status: newValue });
+
+        goalsStore.setGoals(
+            goalsStore.goals.map(g => g.id === props.goal.id ? data.data.goal : g)
+        );
     } catch (error) {
-        console.error('Failed to update status', error);
+        console.error("Failed to update status", error);
     }
 });
 </script>

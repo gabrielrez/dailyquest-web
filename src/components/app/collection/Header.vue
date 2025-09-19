@@ -13,12 +13,16 @@
             Create Goal
         </button>
     </div>
+
+    <CreateGoalModal v-if="isOpen" @close="isOpen = false" @goalCreated="addGoal" :collection="collection" />
 </template>
 
 <script setup>
 import ProfilePicture from "@/components/app/global/ProfilePicture.vue";
 import CollaboratorsProfilePictures from "@/components/app/collection/CollaboratorsProfilePictures.vue";
-import { computed } from "vue";
+import CreateGoalModal from "@/components/modals/CreateGoalModal.vue";
+import { ref, computed } from "vue";
+import { useGoalsStore } from "@/stores/goals";
 
 const props = defineProps({
     collection: {
@@ -28,9 +32,16 @@ const props = defineProps({
     }
 });
 
+const goalsStore = useGoalsStore();
+const isOpen = ref(false);
+
 const allUsers = computed(() => {
     const users = Array.isArray(props.collection?.users) ? props.collection.users : [];
     const owner = props.collection?.owner ? [props.collection.owner] : [];
     return [...users, ...owner];
 });
+
+function addGoal(newGoal) {
+    goalsStore.addGoal(newGoal);
+}
 </script>

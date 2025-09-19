@@ -10,7 +10,7 @@
             <img v-for="(user, index) in displayedUsers" :key="user.id" :src="user.profile_picture
                 ? `${storageUrl}/${user.profile_picture}`
                 : defaultProfilePicture" :alt="user.name"
-                class="w-10 h-10 rounded-full hover:-translate-y-1 transition duration-300 ease-out"
+                class="w-10 h-10 rounded-full object-cover hover:-translate-y-1 transition duration-300 ease-out"
                 :style="{ zIndex: index + 1, opacity: calculateOpacity(index), marginTop: index * -2 + 'px' }" />
         </div>
         <p class="text-[#A1A1AA] text-sm group-hover:underline">
