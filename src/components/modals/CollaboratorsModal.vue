@@ -11,17 +11,17 @@
                     </button>
                 </div>
                 <span class="my-8 block bg-[#292929] h-[1px] rounded"></span>
-                <form class="space-y-5" @submit.prevent="createCollection">
+                <form class="space-y-5" @submit.prevent="inviteUser">
                     <div class="flex items-center gap-5">
                         <input type="email" v-model="user_email" placeholder="example@email.com" required
                             class="w-full px-4 py-2 text-sm bg-transparent border border-[#27272A] rounded-[6px] focus:outline-none focus:border-white text-white" />
                         <button type="submit"
-                            class="group flex justify-center items-center gap-1 w-full max-w-28 bg-white text-[#1E1E1E] text-sm font-semibold py-2 rounded-[6px] cursor-pointer transition-all duration-300 ease-out hover:bg-[#E1E1E2]">
+                            class="group flex justify-center items-center gap-1 w-full max-w-32 bg-white text-[#1E1E1E] text-sm font-semibold py-2 rounded-[6px] cursor-pointer transition-all duration-300 ease-out hover:bg-[#E1E1E2]">
                             {{ loading ? "Sending..." : "Invite" }}
                             <Send class="w-4 h-4 transition-transform duration-300 ease-out group-hover:rotate-45" />
                         </button>
-
                     </div>
+                    <p v-if="errorMessage" class="text-[#FF4181] text-sm">{{ errorMessage }}</p>
                 </form>
                 <div class="mt-8">
                     <ul class="space-y-6">
@@ -41,10 +41,13 @@
                                         <span class="text-[#A1A1AA]">{{ user.username }}</span>
                                     </div>
                                 </div>
-                                <button @click="removeUser(user)" :class="{
-                                    'flex items-center gap-2 text-[#FF4181] opacity-25 cursor-not-allowed': user.id === collection.owner_id,
-                                    'flex items-center gap-2 text-[#FF4181] text-sm hover:underline cursor-pointer': user.id !== collection.owner_id
-                                }" :disabled="user.id === collection.owner_id">
+                                <button @click="removeUser(user)" :class="[
+                                    'flex items-center gap-2',
+                                    (user.id === collection.owner_id || (currentUserId != collection.owner_id && currentUserId.value !== collection.owner_id))
+                                        ? 'text-[#FF4181] opacity-25 cursor-not-allowed'
+                                        : 'text-[#FF4181] text-sm hover:underline cursor-pointer'
+                                ]"
+                                    :disabled="user.id === collection.owner_id || (currentUserId != collection.owner_id && currentUserId.value !== collection.owner_id)">
                                     Remove
                                     <UserRoundX class="w-4 h-4" />
                                 </button>
@@ -57,11 +60,17 @@
             </div>
         </div>
     </transition>
+
+    <SuccessModal :isOpen="successModalOpen" title="Invitation sent!"
+        :message="`Invitation sent successfully to ${user_email}`" @close="successModalOpen = false" />
 </template>
 
 <script setup>
 import { computed, ref } from "vue";
 import { Send, Crown, UserRoundX } from "lucide-vue-next";
+import defaultProfilePicture from "@/assets/default-profile-picture.webp";
+import SuccessModal from "@/components/modals/SuccessModal.vue";
+import { useUserStore } from "@/stores/user";
 import api from "@/services/api";
 
 const props = defineProps({
@@ -79,6 +88,11 @@ const props = defineProps({
 
 const storageUrl = import.meta.env.VITE_STORAGE_URL
 
+const userStore = useUserStore();
+const currentUserId = computed(() => userStore.user?.id);
+
+const successModalOpen = ref(false);
+const errorMessage = ref("");
 const user_email = ref("");
 const loading = ref(false);
 
@@ -92,6 +106,26 @@ const sortedUsers = computed(() => {
         return 0;
     });
 });
+
+async function inviteUser() {
+    loading.value = true;
+    errorMessage.value = "";
+
+    try {
+        await api.post(`/collections/${props.collection.id}/users`, {
+            user_email: user_email.value
+        });
+        successModalOpen.value = true;
+    } catch (error) {
+        if (error.response?.data?.message) {
+            errorMessage.value = error.response.data.message;
+        } else {
+            errorMessage.value = "Unexpected error. Please try again.";
+        }
+    } finally {
+        loading.value = false;
+    }
+}
 
 async function removeUser(user) {
     if (user.id === props.collection.owner_id) return;
