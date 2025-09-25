@@ -14,11 +14,14 @@
                 <form class="space-y-5" @submit.prevent="inviteUser">
                     <div class="flex items-center gap-5">
                         <input type="email" v-model="user_email" placeholder="example@email.com" required
-                            class="w-full px-4 py-2 text-sm bg-transparent border border-[#27272A] rounded-[6px] focus:outline-none focus:border-white text-white" />
-                        <button type="submit"
-                            class="group flex justify-center items-center gap-1 w-full max-w-32 bg-white text-[#1E1E1E] text-sm font-semibold py-2 rounded-[6px] cursor-pointer transition-all duration-300 ease-out hover:bg-[#E1E1E2]">
+                            :disabled="!isOwner"
+                            class="w-full px-4 py-2 text-sm bg-transparent border border-[#27272A] rounded-[6px] focus:outline-none focus:border-white text-white disabled:opacity-50 disabled:cursor-not-allowed" />
+                        <button type="submit" :disabled="loading || !isOwner"
+                            :class="{ 'hover:bg-[#E1E1E2]': isOwner && !loading }"
+                            class="group flex justify-center items-center gap-1 w-full max-w-32 bg-white text-[#1E1E1E] text-sm font-semibold py-2 rounded-[6px] cursor-pointer transition-all duration-300 ease-out disabled:opacity-50 disabled:cursor-not-allowed">
                             {{ loading ? "Sending..." : "Invite" }}
-                            <Send class="w-4 h-4 transition-transform duration-300 ease-out group-hover:rotate-45" />
+                            <Send class="w-4 h-4 transition-transform duration-300 ease-out"
+                                :class="{ 'group-hover:rotate-45': isOwner && !loading }" />
                         </button>
                     </div>
                     <p v-if="errorMessage" class="text-[#FF4181] text-sm">{{ errorMessage }}</p>
@@ -95,6 +98,10 @@ const successModalOpen = ref(false);
 const errorMessage = ref("");
 const user_email = ref("");
 const loading = ref(false);
+
+const isOwner = computed(() => {
+    return currentUserId.value === props.collection?.owner_id;
+});
 
 const emit = defineEmits(["close"]);
 

@@ -5,6 +5,7 @@ import Login from '../pages/auth/Login.vue'
 import Register from '../pages/auth/Register.vue'
 import LandingPage from '../pages/LandingPage.vue'
 import Home from '../pages/app/Home.vue'
+import Profile from '../pages/app/Profile.vue'
 import Collection from '../pages/app/Collection.vue'
 
 const routes = [
@@ -27,6 +28,12 @@ const routes = [
         path: '/home',
         name: 'Home',
         component: Home,
+        meta: { requiresAuth: true }
+    },
+    {
+        path: '/me',
+        name: 'Profile',
+        component: Profile,
         meta: { requiresAuth: true }
     },
     {
