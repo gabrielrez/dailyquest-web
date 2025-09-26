@@ -9,7 +9,8 @@
 
             <!-- <GripVertical class="w-5 h-5 text-[#A1A1AA] cursor-grab drag-handle" /> -->
 
-            <img :src="grabme" alt="grabme icon" class="w-5 cursor-grab drag-handle">
+            <img :src="grabmeIcon" alt="grabme icon"
+                class="w-5 cursor-grab drag-handle">
 
             <div>
                 <h3 :class="textClass" class="text-white text-xl font-semibold">
@@ -61,9 +62,11 @@
 <script setup>
 import { ref, computed, watch, onMounted, onBeforeUnmount } from "vue";
 import api from "@/services/api";
-import { MoreHorizontalIcon, GripVertical } from "lucide-vue-next";
+import { MoreHorizontalIcon } from "lucide-vue-next";
 import { useGoalsStore } from "@/stores/goals";
-import grabme from "@/assets/grabme.svg";
+import Grabme from "@/assets/grabme.svg";
+import GrabmeDone from "@/assets/grabme-done.svg";
+import GrabmeDoing from "@/assets/grabme-doing.svg";
 
 const props = defineProps({
     collection: {
@@ -77,6 +80,12 @@ const props = defineProps({
         default: () => null
     },
 });
+
+const grabmeIcon = computed(() => {
+    if (props.goal.status === 'done') return GrabmeDone
+    if (props.goal.status === 'doing') return GrabmeDoing
+    return Grabme
+})
 
 const goalsStore = useGoalsStore();
 
