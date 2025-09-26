@@ -7,6 +7,7 @@ import LandingPage from '../pages/LandingPage.vue'
 import Home from '../pages/app/Home.vue'
 import Profile from '../pages/app/Profile.vue'
 import Collection from '../pages/app/Collection.vue'
+import Accept from '../pages/app/Accept.vue'
 
 const routes = [
     {
@@ -23,6 +24,11 @@ const routes = [
         path: '/',
         name: 'LandingPage',
         component: LandingPage,
+    },
+    {
+        path: '/accept',
+        name: 'Accept',
+        component: Accept,
     },
     {
         path: '/home',
