@@ -6,10 +6,10 @@
             <p :class="textClass" class="mt-2 text-[#A1A1AA]">{{ goal.description }}</p>
         </div>
         <div class="flex items-center gap-5 relative">
-            <div>
+            <div class="w-full min-w-max">
                 <span class="text-[#A1A1AA] text-sm">Assigned to:</span>
                 <select v-model="selectedAssigned" :style="assignedToSelectStyle"
-                    class="px-3 py-1.5 bg-[#09090B] text-sm text-[#A1A1AA] font-bold focus:outline-none cursor-pointer">
+                    class="px-3 py-1.5 bg-[#09090B] text-sm text-[#A1A1AA] hover:text-white font-bold focus:outline-none cursor-pointer">
                     <option value="">---</option>
                     <option v-for="user in allUsers" :key="user.id" :value="user.id">
                         {{ user.username }}
@@ -104,7 +104,7 @@ const assignedToSelectStyle = computed(() => {
 });
 
 const textClass = computed(() => {
-    return selectedStatus.value === "done" ? "text-white line-through" : "text-white";
+    return selectedStatus.value === "done" ? "text-[#A1A1AA] line-through" : "text-[#A1A1AA]";
 });
 
 const dropdownOpen = ref(false);
