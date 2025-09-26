@@ -9,7 +9,7 @@
                     </div>
                     <div>
                         <h3 class="text-white text-xl font-semibold">{{ collectionName }}</h3>
-                        <p class="mt-1 text-[#A1A1AA] text-sm">Invited by <span class="font-medium">{{
+                        <p class="mt-1 text-[#A1A1AA] text-sm">Invited by <span class="font-bold">{{
                             inviterName }}</span></p>
                     </div>
                 </div>
@@ -36,26 +36,60 @@
                 </div>
             </div>
         </div>
+        <ErrorModal :isOpen="isErrorModalOpen" :message="errorMessage"
+            @close="isErrorModalOpen = false" />
     </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import { Users } from "lucide-vue-next";
+import ErrorModal from "@/components/modals/ErrorModal.vue";
+import api from "@/services/api";
 
-const props = defineProps({
-    inviterName: { type: String, default: 'User Name' },
-    collectionName: { type: String, default: 'Collection Name' },
-    message: { type: String, default: '' },
-});
+const route = useRoute();
+const router = useRouter();
 
 const loading = ref(false);
+const inviterName = ref('');
+const collectionName = ref('');
+const token = ref('');
 
-function onAcceptClick() {
-    //
+const isErrorModalOpen = ref(false);
+const errorMessage = ref('Something went wrong. Please try again.');
+
+onMounted(() => {
+    token.value = route.query.token || '';
+    collectionName.value = route.query.collection || '';
+    inviterName.value = route.query.user || '';
+});
+
+async function onAcceptClick() {
+    loading.value = true;
+
+    try {
+        await api.post('/collections/invitations/accept', {
+            token: token.value
+        });
+
+        router.push('/home');
+    } catch (error) {
+        console.error('Erro ao aceitar o convite:', error);
+
+        if (error.response?.data?.message) {
+            errorMessage.value = error.response.data.message;
+        } else {
+            errorMessage.value = 'Unable to accept invitation. Please try again.';
+        }
+
+        isErrorModalOpen.value = true;
+    } finally {
+        loading.value = false;
+    }
 }
 
-function onDeclineClick() {
-    //
+async function onDeclineClick() {
+    router.push('/home');
 }
 </script>

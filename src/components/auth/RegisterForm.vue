@@ -52,7 +52,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import api from "@/services/api";
 import ErrorModal from "@/components/modals/ErrorModal.vue";
 import Cookie from "js-cookie";
@@ -65,6 +65,12 @@ const passwordConfirmation = ref("");
 const loading = ref(false);
 const showError = ref(false);
 const errorMessage = ref("");
+const token = ref(null);
+
+onMounted(() => {
+    const params = new URLSearchParams(window.location.search);
+    token.value = params.get("token");
+});
 
 const handleRegister = async () => {
     loading.value = true;
@@ -72,13 +78,19 @@ const handleRegister = async () => {
     errorMessage.value = "";
 
     try {
-        const { data } = await api.post("/register", {
+        const body = {
             full_name: fullName.value,
             username: username.value,
             email: email.value,
             password: password.value,
             password_confirmation: passwordConfirmation.value,
-        });
+        };
+
+        if (token.value) {
+            body.token = token.value;
+        }
+
+        const { data } = await api.post("/register", body);
 
         Cookie.set("_my_token", data.data.token);
         window.location.href = "/home";
