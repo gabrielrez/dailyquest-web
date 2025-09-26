@@ -36,8 +36,7 @@
                 </div>
             </div>
         </div>
-        <ErrorModal :isOpen="isErrorModalOpen" :message="errorMessage"
-            @close="isErrorModalOpen = false" />
+        <ErrorModal :isOpen="isErrorModalOpen" :message="errorMessage" @close="isErrorModalOpen = false" />
     </div>
 </template>
 
@@ -75,7 +74,11 @@ async function onAcceptClick() {
 
         router.push('/home');
     } catch (error) {
-        console.error('Erro ao aceitar o convite:', error);
+        if (!route.query.token || error.response.status === 404) {
+            errorMessage.value = "Something went wrong. Please try again.";
+            isErrorModalOpen.value = true;
+            return;
+        }
 
         if (error.response?.data?.message) {
             errorMessage.value = error.response.data.message;
