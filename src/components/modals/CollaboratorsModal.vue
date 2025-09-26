@@ -2,7 +2,7 @@
     <transition name="fade">
         <div class="fixed inset-0 bg-[#020202]/50 backdrop-blur-xs flex items-center justify-center z-50">
             <div
-                class="bg-[#09090B] rounded-lg border border-[#27272A] border-opacity-25 w-full max-w-lg px-9 py-8 relative">
+                class="bg-[#09090B] rounded-lg border border-[#27272A] border-opacity-25 w-full max-w-xl px-9 py-8 relative">
                 <div class="flex items-center justify-between">
                     <h3 class="text-white text-xl font-semibold">Collaborators</h3>
                     <button @click="$emit('close')"
@@ -27,39 +27,42 @@
                     <p v-if="errorMessage" class="text-[#FF4181] text-sm">{{ errorMessage }}</p>
                 </form>
                 <div class="mt-8">
-                    <ul class="space-y-6">
-                        <li v-for="user in sortedUsers" :key="user.id" class="text-white text-sm">
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center gap-3">
-                                    <img :src="user.profile_picture
-                                        ? `${storageUrl}/${user.profile_picture}`
-                                        : defaultProfilePicture" :alt="user.name"
-                                        class="w-10 h-10 rounded-full object-cover">
-                                    <div>
-                                        <div class="flex items-center gap-1">
-                                            <h3 class="text-white text-sm font-medium">{{ user.full_name }}</h3>
-                                            <Crown v-if="user.id === collection.owner_id"
-                                                class="w-4 h-4 text-[#F9A825]" />
+                    <div class="w-full max-h-[224px] overflow-y-auto custom-scroll">
+                        <ul class="space-y-6">
+                            <li v-for="user in sortedUsers" :key="user.id" class="text-white text-sm">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-3">
+                                        <img :src="user.profile_picture
+                                            ? `${storageUrl}/${user.profile_picture}`
+                                            : defaultProfilePicture" :alt="user.name"
+                                            class="w-10 h-10 rounded-full object-cover">
+                                        <div>
+                                            <div class="flex items-center gap-1">
+                                                <h3 class="text-white text-sm font-medium">{{ user.full_name }}</h3>
+                                                <Crown v-if="user.id === collection.owner_id"
+                                                    class="w-4 h-4 text-[#F9A825]" />
+                                            </div>
+                                            <span class="text-[#A1A1AA]">{{ user.username }}</span>
                                         </div>
-                                        <span class="text-[#A1A1AA]">{{ user.username }}</span>
                                     </div>
+                                    <button @click="removeUser(user)" :class="[
+                                        'flex items-center gap-2',
+                                        (user.id === collection.owner_id || (currentUserId != collection.owner_id && currentUserId.value !== collection.owner_id))
+                                            ? 'text-[#FF4181] opacity-25 cursor-not-allowed'
+                                            : 'text-[#FF4181] text-sm hover:underline cursor-pointer'
+                                    ]"
+                                        :disabled="user.id === collection.owner_id || (currentUserId != collection.owner_id && currentUserId.value !== collection.owner_id)">
+                                        Remove
+                                        <UserRoundX class="w-4 h-4" />
+                                    </button>
                                 </div>
-                                <button @click="removeUser(user)" :class="[
-                                    'flex items-center gap-2',
-                                    (user.id === collection.owner_id || (currentUserId != collection.owner_id && currentUserId.value !== collection.owner_id))
-                                        ? 'text-[#FF4181] opacity-25 cursor-not-allowed'
-                                        : 'text-[#FF4181] text-sm hover:underline cursor-pointer'
-                                ]"
-                                    :disabled="user.id === collection.owner_id || (currentUserId != collection.owner_id && currentUserId.value !== collection.owner_id)">
-                                    Remove
-                                    <UserRoundX class="w-4 h-4" />
-                                </button>
-                            </div>
-                        </li>
-                        <li v-if="users.length === 0" class="text-gray-400 text-sm">No users invited yet.
-                        </li>
-                    </ul>
+                            </li>
+                            <li v-if="users.length === 0" class="text-gray-400 text-sm">No users invited yet.
+                            </li>
+                        </ul>
+                    </div>
                 </div>
+
             </div>
         </div>
     </transition>
@@ -156,5 +159,30 @@ async function removeUser(user) {
 .fade-enter-from,
 .fade-leave-to {
     opacity: 0;
+}
+
+.custom-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: #151518 #27272A;
+    padding-right: 20px;
+}
+
+.custom-scroll::-webkit-scrollbar {
+    width: 10px;
+}
+
+.custom-scroll::-webkit-scrollbar-track {
+    background: #27272A;
+    border-radius: 6px;
+}
+
+.custom-scroll::-webkit-scrollbar-thumb {
+    background-color: #151518;
+    border-radius: 6px;
+    border: 2px solid #27272A;
+}
+
+.custom-scroll::-webkit-scrollbar-thumb:hover {
+    background-color: #1A1A1A;
 }
 </style>
