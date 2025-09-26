@@ -1,10 +1,26 @@
 <template>
     <div :style="containerStyle"
         class="flex items-center justify-between gap-5 bg-[#09090B] border border-[#27272A] rounded-[6px] px-6 py-4 relative hover:translate-x-2 transition duration-300 ease-out">
-        <div>
-            <h3 :class="textClass" class="text-white text-xl font-semibold">{{ goal.name }}</h3>
-            <p :class="textClass" class="mt-2 text-[#A1A1AA]">{{ goal.description }}</p>
+        <div class="flex items-center gap-5">
+            <!-- <svg class="w-5 h-5 text-[#A1A1AA] cursor-grab drag-handle" fill="none" stroke="currentColor"
+                stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 10h16M4 14h16" />
+            </svg> -->
+
+            <!-- <GripVertical class="w-5 h-5 text-[#A1A1AA] cursor-grab drag-handle" /> -->
+
+            <img :src="grabme" alt="grabme icon" class="w-5 cursor-grab drag-handle">
+
+            <div>
+                <h3 :class="textClass" class="text-white text-xl font-semibold">
+                    {{ goal.name }}
+                </h3>
+                <p :class="textClass" class="mt-2 text-[#A1A1AA]">
+                    {{ goal.description }}
+                </p>
+            </div>
         </div>
+
         <div class="flex items-center gap-5 relative">
             <div class="w-full min-w-max">
                 <span class="text-[#A1A1AA] text-sm">Assigned to:</span>
@@ -16,6 +32,7 @@
                     </option>
                 </select>
             </div>
+
             <div>
                 <select v-model="selectedStatus" :style="statusSelectStyle"
                     class="px-4 py-2.5 bg-[#09090B] text-sm text-white focus:outline-none border border-[#27272A] rounded-[6px] cursor-pointer">
@@ -24,6 +41,7 @@
                     <option value="done">✅ Done</option>
                 </select>
             </div>
+
             <div ref="dropdownRef" class="relative">
                 <MoreHorizontalIcon @click="toggleDropdown" class="w-6 h-6 text-white cursor-pointer" />
                 <div v-if="dropdownOpen"
@@ -43,8 +61,9 @@
 <script setup>
 import { ref, computed, watch, onMounted, onBeforeUnmount } from "vue";
 import api from "@/services/api";
-import { MoreHorizontalIcon } from "lucide-vue-next";
+import { MoreHorizontalIcon, GripVertical } from "lucide-vue-next";
 import { useGoalsStore } from "@/stores/goals";
+import grabme from "@/assets/grabme.svg";
 
 const props = defineProps({
     collection: {
