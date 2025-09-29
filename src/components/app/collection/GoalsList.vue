@@ -12,7 +12,7 @@
 </template>
 
 <script setup>
-import { watch } from "vue";
+import api from "@/services/api";
 import { storeToRefs } from "pinia";
 import { useGoalsStore } from "@/stores/goals";
 import GoalItem from "@/components/app/collection/GoalItem.vue";
@@ -27,33 +27,20 @@ const props = defineProps({
 const goalsStore = useGoalsStore();
 const { goals } = storeToRefs(goalsStore);
 
-const STORAGE_KEY = (collectionId) => `goals_order_${collectionId}`;
+const onDragEnd = async () => {
+    if (!goals.value.length) return;
 
-watch(
-    () => props.collection,
-    (collection) => {
-        if (!collection?.id) return;
+    const goals_data = goals.value.map((goal, index) => ({
+        id: goal.id,
+        order: index + 1
+    }));
 
-        const saved = localStorage.getItem(STORAGE_KEY(collection.id));
-        if (saved) {
-            const savedOrder = JSON.parse(saved);
-            const ordered = savedOrder
-                .map((id) => goals.value.find((g) => g.id === id))
-                .filter(Boolean);
-            const missing = goals.value.filter(
-                (g) => !savedOrder.includes(g.id)
-            );
-            goals.value = [...ordered, ...missing];
-        }
-    },
-    { immediate: true }
-);
-
-const onDragEnd = () => {
-    const orderedIds = goals.value.map((g) => g.id);
-    localStorage.setItem(
-        STORAGE_KEY(props.collection.id),
-        JSON.stringify(orderedIds)
-    );
+    try {
+        await api.patch(`/collections/${props.collection.id}/goals/reorder`, {
+            goals_data
+        });
+    } catch (error) {
+        console.error("Failed to reorder goals", error);
+    }
 };
 </script>

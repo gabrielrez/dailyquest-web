@@ -2,15 +2,7 @@
     <div :style="containerStyle"
         class="flex items-center justify-between gap-5 bg-[#09090B] border border-[#27272A] rounded-[6px] px-6 py-4 relative hover:translate-x-2 transition duration-300 ease-out">
         <div class="flex items-center gap-5">
-            <!-- <svg class="w-5 h-5 text-[#A1A1AA] cursor-grab drag-handle" fill="none" stroke="currentColor"
-                stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M4 10h16M4 14h16" />
-            </svg> -->
-
-            <!-- <GripVertical class="w-5 h-5 text-[#A1A1AA] cursor-grab drag-handle" /> -->
-
-            <img :src="grabmeIcon" alt="grabme icon"
-                class="w-5 cursor-grab drag-handle">
+            <img :src="grabmeIcon" alt="grabme icon" class="w-5 cursor-grab drag-handle">
 
             <div>
                 <h3 :class="textClass" class="text-white text-xl font-semibold">
